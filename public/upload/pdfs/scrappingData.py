@@ -1,6 +1,6 @@
 import pdfplumber
 
-pdf_file_path = '6850003398669 VT EDNEUSA.pdf'
+pdf_file_path = 'forpdf.pdf'
 extracted_data =[]
 # Open the PDF file
 with pdfplumber.open(pdf_file_path) as pdf:
