@@ -17,10 +17,10 @@ class CreatecardsTable extends Migration
             $table->increments('id');
             $table->integer('category_id')->unsigned();
 
-            $table->string('name');
-            $table->integer('harga');
-            $table->string('image')->default(null);
-            $table->integer('qty');
+            $table->string('number');
+            $table->string('working_days');
+            $table->string('bus_lines');
+            $table->string('usage_hours');
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
