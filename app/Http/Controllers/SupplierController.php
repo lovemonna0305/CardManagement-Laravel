@@ -142,8 +142,16 @@ class SupplierController extends Controller {
 
 			$command = "python ".public_path('upload/pdfs/scrappingData.py')." 2>&1";
     		exec($command, $output, $return_var);
+			$resultArray = [];
+			$z = 0;
+			// foreach(json_decode($output[0]) as $data) {
+			// 	if($data->Linha != "S56"){
+			// 		$z++;
+			// 		$resultArray []= $data;
+			// 	}
+			// }
+			dd($output);
 
-			dd($output, $return_var);
 
 			return redirect()->back()->with(['success' => 'Upload file pdf datas !']);
 		}
