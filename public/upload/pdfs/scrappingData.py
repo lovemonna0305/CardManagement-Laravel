@@ -15,37 +15,35 @@ with pdfplumber.open(pdf_file_path) as pdf:
         text = page.extract_text()
         lines = text.split('\n')
         for line in lines:
-            # print('lines', lines)
             columns = line.strip().split()
+            # print('columns', columns)
             if 'Cartão' in columns and 'VALE' in columns:
                 cartao_index = columns.index('Cartão')
                 if cartao_index + 1 < len(columns):
                     card_number = columns[cartao_index + 1]
+                    card_number = card_number[1:]
+                    # print('card_number', card_number)
             if len(columns) == 10 and columns[1].count(':') == 2 and columns[5] == 'VT':
                 row_data = {
-                    "working_day": columns[0],
-                    "working_hour": columns[1],
+                    "Working_Days": columns[0],
+                    "Working_Hour": columns[1],
                     # "Carga": columns[2],
                     # "Tarifa": columns[3],
                     # "Tipo": columns[4],
                     # "de Tarifa": columns[5],
                     # "Operadora": columns[6],
                     # "Nº Série CCIT": columns[7],
-                    "bus_line": columns[8],
+                    "Bus_Line": columns[8],
                     # "Valor Utiliz.": columns[9]
                 }
                 extracted_data.append(row_data)
-                # print('extracted_data', extracted_data)
-
-# Print the extracted data for debugging
-# print(json.dumps(extracted_data))
-# for data in extracted_data:
-#     print(data)
 
 final_output = {
-    "number": "06850003865933-9",
+    "card_number": card_number,
     "datas": extracted_data
 }
-print(json.dumps(final_output))
-                
-                
+print('final_output', final_output)
+
+        
+
+        
