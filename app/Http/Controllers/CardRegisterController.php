@@ -25,9 +25,9 @@ class CardRegisterController extends Controller
      */
     public function index()
     {
-        $cards = card::orderBy('name','ASC')
+        $cards = Card::orderBy('number','ASC')
             ->get()
-            ->pluck('name','id');
+            ->pluck('number','id');
 
         $customers = Customer::orderBy('name','ASC')
             ->get()

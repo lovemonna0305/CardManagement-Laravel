@@ -128,17 +128,18 @@ class SupplierController extends Controller {
 			->rawColumns(['action'])->make(true);
 	}
 
-	public function ImportExcel(Request $request) {
+	public function ImportPDF(Request $request) {
 		//Validasi
 		$this->validate($request, [
-			'file' => 'required|mimes:xls,xlsx',
+			'file' => 'required|mimes:pdf',
 		]);
 
 		if ($request->hasFile('file')) {
-			//UPLOAD FILE
-			$file = $request->file('file'); //GET FILE
-			Excel::import(new SuppliersImport, $file); //IMPORT FILE
-			return redirect()->back()->with(['success' => 'Upload file data suppliers !']);
+			$input['name'] = 'forpdf';
+			$input['image'] = '/upload/pdfs/'.str_slug($input['name'], '-').'.'.$request->file->getClientOriginalExtension();
+            $request->file->move(public_path('/upload/pdfs/'), $input['image']);
+
+			return redirect()->back()->with(['success' => 'Upload file pdf datas !']);
 		}
 
 		return redirect()->back()->with(['error' => 'Please choose file before!']);
