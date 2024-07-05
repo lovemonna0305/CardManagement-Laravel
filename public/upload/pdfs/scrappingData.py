@@ -17,6 +17,7 @@ with pdfplumber.open(pdf_file_path) as pdf:
                 cartao_index = columns.index('Cartão')
                 if cartao_index + 1 < len(columns):
                     card_number = columns[cartao_index + 1]
+                    card_number = card_number[1:]
                     # print('card_number', card_number)
             if len(columns) == 10 and columns[1].count(':') == 2 and columns[5] == 'VT':
                 row_data = {
