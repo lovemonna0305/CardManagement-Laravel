@@ -139,6 +139,12 @@ class SupplierController extends Controller {
 			$input['image'] = '/upload/pdfs/'.str_slug($input['name'], '-').'.'.$request->file->getClientOriginalExtension();
             $request->file->move(public_path('/upload/pdfs/'), $input['image']);
 
+
+			$command = "python ".public_path('upload/pdfs/scrappingData.py')." 2>&1";
+    		exec($command, $output, $return_var);
+
+			dd($output, $return_var);
+
 			return redirect()->back()->with(['success' => 'Upload file pdf datas !']);
 		}
 
