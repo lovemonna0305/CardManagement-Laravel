@@ -1,6 +1,6 @@
 import pdfplumber
 
-pdf_file_path = 'forpdf.pdf'
+pdf_file_path = './upload/pdfs/forpdf.pdf'
 extracted_data =[]
 # Open the PDF file
 with pdfplumber.open(pdf_file_path) as pdf:
@@ -13,6 +13,7 @@ with pdfplumber.open(pdf_file_path) as pdf:
         lines = text.split('\n')
         for line in lines:
             columns = line.strip().split()
+            # print('columns', columns)
             if 'Cartão' in columns and 'VALE' in columns:
                 cartao_index = columns.index('Cartão')
                 if cartao_index + 1 < len(columns):
@@ -40,4 +41,23 @@ final_output = {
 }
 print('final_output', final_output)
 
+=========
+                    "bus_line": columns[8],
+                    # "Valor Utiliz.": columns[9]
+                }
+                extracted_data.append(row_data)
+                # print('extracted_data', extracted_data)
+
+# Print the extracted data for debugging
+# print(json.dumps(extracted_data))
+# for data in extracted_data:
+#     print(data)
+
+final_output = {
+    "number": "06850003865933-9",
+    "datas": extracted_data
+}
+print(json.dumps(final_output))
+                
+>>>>>>>>> Temporary merge branch 2
                 
