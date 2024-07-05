@@ -64,6 +64,27 @@
     {{--</script>--}}
 
     <script type="text/javascript">
+
+            $('.date').datepicker({
+                multidate: true,
+                format: 'dd/mm/yyyy'
+            });
+
+            $(function () {
+                $('select').each(function () {
+                    $(this).select2({
+                    theme: 'bootstrap4',
+                    width: 'style',
+                    placeholder: $(this).attr('placeholder'),
+                    allowClear: Boolean($(this).data('allow-clear')),
+                    });
+                });
+            });
+
+
+
+
+
         var table = $('#cards-table').DataTable({
             processing: true,
             serverSide: true,
@@ -100,9 +121,16 @@
                     $('.modal-title').text('Edit cards');
 
                     $('#id').val(data.id);
-                    $('#name').val(data.name);
-                    $('#harga').val(data.harga);
-                    $('#qty').val(data.qty);
+                    $('#number').val(data.number);
+                    $('#working_days').val(data.working_days);
+                    $('#bus_lines').val(data.bus_lines);
+                    var selectedOptions = data.usage_hours.split(',');
+                    for (var i = 0; i < selectedOptions.length; i++) {
+                        var optionVal = selectedOptions[i];
+                        $("#multiselect").find("option[value="+optionVal+"]").prop("selected", true);
+                    }
+
+                    
                     $('#category_id').val(data.category_id);
                 },
                 error : function() {

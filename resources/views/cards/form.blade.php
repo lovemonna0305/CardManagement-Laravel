@@ -15,29 +15,42 @@
                     <input type="hidden" id="id" name="id">
 
 
-                    <div class="box-body">
+                    <div class="box-body" id="sssssssssss">
                         <div class="form-group">
-                            <label >Name</label>
-                            <input type="text" class="form-control" id="name" name="name"  autofocus required>
+                            <label >Number</label>
+                            <input type="text" class="form-control" id="number" name="number"  autofocus required>
                             <span class="help-block with-errors"></span>
                         </div>
 
                         <div class="form-group">
-                            <label >Price</label>
-                            <input type="text" class="form-control" id="harga" name="harga"   required>
+                            <label >Working Days</label>
+                            <input type="text" class="form-control date" id="working_days" placeholder="Pick the multiple dates" name="working_days"   required>
                             <span class="help-block with-errors"></span>
                         </div>
 
                         <div class="form-group">
-                            <label >Quantity</label>
-                            <input type="text" class="form-control" id="qty" name="qty"   required>
+                            <label >Usage Hours</label>
+                            <select id="multiselect" class="form-control" name="usage_hours[]" multiple="multiple" required>
+                                <option value="1" >9:00-10:00</option>
+                                <option value="2" >10:00-11:00</option>
+                                <option value="3" >11:00-12:00</option>
+                                <option value="4">12:00-13:00</option>
+                                <option value="5">13:00-14:00</option>
+                                <option value="6">14:00-15:00</option>
+                                <option value="7">15:00-16:00</option>
+                                <option value="8">16:00-17:00</option>
+                                <option value="9">17:00-18:00</option>
+                                <option value="10">18:00-19:00</option>
+                                <option value="11">19:00-20:00</option>
+                                <option value="12">20:00-21:00</option>
+                            </select>
                             <span class="help-block with-errors"></span>
                         </div>
 
-
+                        
                         <div class="form-group">
-                            <label >Image</label>
-                            <input type="file" class="form-control" id="image" name="image" >
+                            <label >Bus Lines</label>
+                            <input type="text" class="form-control" id="bus_lines" name="bus_lines"   required>
                             <span class="help-block with-errors"></span>
                         </div>
 
@@ -46,9 +59,6 @@
                             {!! Form::select('category_id', $category, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Category --', 'id' => 'category_id', 'required']) !!}
                             <span class="help-block with-errors"></span>
                         </div>
-
-
-
 
                     </div>
                     <!-- /.box-body -->

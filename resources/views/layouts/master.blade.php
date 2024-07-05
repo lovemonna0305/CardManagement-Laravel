@@ -17,6 +17,16 @@
     {{-- SweetAlert2 --}}
     <script src="{{ asset('assets/sweetalert2/sweetalert2.min.js') }}"></script>
     <link href="{{ asset('assets/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+
+
+    <!-- select2 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+    <!-- select2-bootstrap4-theme -->
+    <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet"> <!-- for live demo page -->
+
+
 
 
     <!-- Theme style -->
@@ -139,6 +149,11 @@
 
 <!-- jQuery 3 -->
 <script src="{{  asset('assets/bower_components/jquery/dist/jquery.min.js') }} "></script>
+<script src="{{  asset('assets/dist/js/bootstrap-datepicker.js') }} "></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+
 <!-- Bootstrap 3.3.7 -->
 <script src="{{  asset('assets/bower_components/bootstrap/dist/js/bootstrap.min.js') }} "></script>
 <!-- AdminLTE App -->
