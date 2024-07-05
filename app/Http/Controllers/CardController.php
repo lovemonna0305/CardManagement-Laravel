@@ -52,18 +52,29 @@ class CardController extends Controller
 
         $this->validate($request , [
             'number'          => 'required|string',
-            'category_id'   => 'required',
+            // 'working_days'   => 'required',
+            // 'usage_hours'   => 'required',
+            // 'bus_lines'   => 'required',
         ]);
-
+        
         $input = $request->all();
-        $input['image'] = null;
+        $usage_hours = implode(",", $input['usage_hours']);
+        $data = [
+            'number' => $input['number'],
+            'working_days' => $input['working_days'],
+            'usage_hours' => $usage_hours,
+            'bus_lines' => $input['bus_lines'],
+            'category_id' => $input['category_id'],
+        ];
 
-        if ($request->hasFile('image')){
-            $input['image'] = '/upload/cards/'.str_slug($input['name'], '-').'.'.$request->image->getClientOriginalExtension();
-            $request->image->move(public_path('/upload/cards/'), $input['image']);
-        }
+        // $input['image'] = null;
 
-        Card::create($input);
+        // if ($request->hasFile('image')){
+        //     $input['image'] = '/upload/cards/'.str_slug($input['name'], '-').'.'.$request->image->getClientOriginalExtension();
+        //     $request->image->move(public_path('/upload/cards/'), $input['image']);
+        // }
+
+        Card::create($data);
 
         return response()->json([
             'success' => true,
@@ -112,31 +123,42 @@ class CardController extends Controller
             ->pluck('name','id');
 
         $this->validate($request , [
-            'name'          => 'required|string',
-            'harga'         => 'required',
-            'qty'           => 'required',
+            'number'          => 'required|string',
+            // 'harga'         => 'required',
+            // 'qty'           => 'required',
 //            'image'         => 'required',
             'category_id'   => 'required',
         ]);
 
         $input = $request->all();
+        $usage_hours = implode(",", $input['usage_hours']);
+
         $produk = Card::findOrFail($id);
 
-        $input['image'] = $produk->image;
 
-        if ($request->hasFile('image')){
-            if (!$produk->image == NULL){
-                unlink(public_path($produk->image));
-            }
-            $input['image'] = '/upload/cards/'.str_slug($input['name'], '-').'.'.$request->image->getClientOriginalExtension();
-            $request->image->move(public_path('/upload/cards/'), $input['image']);
-        }
+        // $input['image'] = $produk->image;
 
-        $produk->update($input);
+        // if ($request->hasFile('image')){
+        //     if (!$produk->image == NULL){
+        //         unlink(public_path($produk->image));
+        //     }
+        //     $input['image'] = '/upload/cards/'.str_slug($input['name'], '-').'.'.$request->image->getClientOriginalExtension();
+        //     $request->image->move(public_path('/upload/cards/'), $input['image']);
+        // }
+
+        $data = [
+            'number' => $input['number'],
+            'working_days' => $input['working_days'],
+            'usage_hours' => $usage_hours,
+            'bus_lines' => $input['bus_lines'],
+            'category_id' => $input['category_id'],
+        ];
+
+        $produk->update($data);
 
         return response()->json([
             'success' => true,
-            'message' => 'cards Update'
+            'message' => 'Cards Update'
         ]);
     }
 

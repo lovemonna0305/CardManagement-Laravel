@@ -1,6 +1,9 @@
 import pdfplumber
+import json
+import re
+import sys
 
-pdf_file_path = 'forpdf.pdf'
+pdf_file_path = './upload/pdfs/forpdf.pdf'
 extracted_data =[]
 # Open the PDF file
 with pdfplumber.open(pdf_file_path) as pdf:
@@ -13,6 +16,7 @@ with pdfplumber.open(pdf_file_path) as pdf:
         lines = text.split('\n')
         for line in lines:
             columns = line.strip().split()
+            # print('columns', columns)
             if 'Cartão' in columns and 'VALE' in columns:
                 cartao_index = columns.index('Cartão')
                 if cartao_index + 1 < len(columns):
@@ -40,4 +44,6 @@ final_output = {
 }
 print('final_output', final_output)
 
-                
+        
+
+        

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ExportSuppliers;
-use App\Imports\SuppliersImport;
+use App\Card;
 use App\Supplier;
 use Excel;
 use Illuminate\Http\Request;
@@ -120,6 +120,14 @@ class SupplierController extends Controller {
 	public function apiSuppliers() {
 		$suppliers = Supplier::all();
 
+		$data = [];
+		foreach($suppliers as $supplier) {
+			$data[]=(
+				'number' => Card::find($supplier->category_id)->first()->,
+				'non_working_days' => Card::find($supplier->category_id),
+			)
+		}
+
 		return Datatables::of($suppliers)
 			->addColumn('action', function ($suppliers) {
 				return '<a onclick="editForm(' . $suppliers->id . ')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
@@ -142,8 +150,184 @@ class SupplierController extends Controller {
 
 			$command = "python ".public_path('upload/pdfs/scrappingData.py')." 2>&1";
     		exec($command, $output, $return_var);
+			$resultArray = [];
+			$z = 0;
+			// foreach(json_decode($output[0]) as $data) {
+			// 	if($data->Linha != "S56"){
+			// 		$z++;
+			// 		$resultArray []= $data;
+			// 	}
+			// }
 
-			dd($output, $return_var);
+			$outputArray = json_decode($output[0]);
+			// dd($outputArray->datas);
+			$real_hours = array(
+				"1" => "09:00-10:00",
+				"2" => "10:00-11:00",
+				"3" => "11:00-12:00",
+				"4" => "12:00-13:00",
+				"5" => "13:00-14:00",
+				"6" => "14:00-15:00",
+				"7" => "15:00-16:00",
+				"8" => "16:00-17:00",
+				"9" => "17:00-18:00",
+				"10" => "18:00-19:00",
+				"11" => "19:00-20:00",
+				"12" => "20:00-21:00",
+				"13" => "21:00-22:00",
+			);
+
+			// $card = Card::where('number',$outputArray->number)->first();
+
+			// $x=0; 
+			// $y=0; 
+			// $z=0; 
+			
+			// 	$working_days =  explode(",", $card->working_days);
+			// 	$hours = explode(",", $card->usage_hours);
+			// 	$bus_lines = $card->bus_lines;
+
+			// 	$usage_hours = [];
+
+			// 	foreach ($outputArray->datas as $data){
+	
+			// 		if (in_array($data->working_day, $working_days)) {
+			// 			// echo "The date " . $data->working_day . " is present in the array.\n". PHP_EOL;
+			// 		} else {
+			// 			$x++;
+	
+			// 			// X Variable
+			// 			// echo "The date " . $data->working_day . " is not present in the array.\n". PHP_EOL;      
+			// 		}
+				
+				
+			// 		foreach ($hours as $key => $value) {
+			// 			if (array_key_exists($value, $real_hours)) {
+			// 				$usage_hours [] = $real_hours[$value];
+			// 			}
+			// 		}
+					
+			// 		// $time = "10:54:31";
+			// 		$time = $data->working_hour;
+			// 		var_dump($time);
+
+					
+			// 		$is_time_found = false;
+			// 		foreach ($usage_hours as $hour_range) {
+			// 			$start_time = explode("-", $hour_range)[0];
+			// 			$end_time = explode("-", $hour_range)[1];
+					
+			// 			$start_time_parts = explode(":", $start_time);
+			// 			$end_time_parts = explode(":", $end_time);
+					
+			// 			$start_time_seconds = ($start_time_parts[0] * 3600) + ($start_time_parts[1] * 60);
+			// 			$end_time_seconds = ($end_time_parts[0] * 3600) + ($end_time_parts[1] * 60);
+					
+			// 			$time_parts = explode(":", $time);
+			// 			$time_seconds = ($time_parts[0] * 3600) + ($time_parts[1] * 60) + $time_parts[2];
+					
+			// 			if ($time_seconds >= $start_time_seconds && $time_seconds <= $end_time_seconds) {
+			// 				$is_time_found = true;
+			// 				// echo "The time $time is within the range " . $hour_range . ".\n";
+			// 				break;
+			// 			}
+			// 		}
+					
+			// 		if (!$is_time_found) {
+			// 			// Y Variable
+			// 			$y++;
+			// 			// echo "The time $time is not within any of the ranges in the \$usage_hours array.\n";
+			// 		}
+			// 		$compareBusLines = $data->bus_line;
+			// 		if($bus_lines == $compareBusLines) {
+			// 			// echo "The Bus lines is same! \n";
+			// 		} else {
+			// 			// Z Variable
+			// 			// echo "The Bus lines not contains! \n";
+			// 			$z++;
+			// 		}
+			// 	}
+
+
+
+
+			// $cards = Card::all();
+
+
+			// $x=0; 
+			// $y=0; 
+			// $z=0; 
+			
+			// foreach ($cards as $card){
+			// 	$working_days =  explode(",", $card->working_days);
+			// 	$hours = explode(",", $card->usage_hours);
+			// 	$bus_lines = $card->bus_lines;
+
+			// 	$usage_hours = [];
+
+			// 	foreach ($outputArray->datas as $data){
+	
+			// 		if (in_array($data->working_day, $working_days)) {
+			// 			// echo "The date " . $data->working_day . " is present in the array.\n". PHP_EOL;
+			// 		} else {
+			// 			$x++;
+	
+			// 			// X Variable
+			// 			// echo "The date " . $data->working_day . " is not present in the array.\n". PHP_EOL;      
+			// 		}
+	
+				
+				
+			// 	foreach ($hours as $key => $value) {
+			// 		if (array_key_exists($value, $real_hours)) {
+			// 			$usage_hours [] = $real_hours[$value];
+			// 		}
+			// 	}
+				
+			// 	// $time = "10:54:31";
+			// 	$time = $data->working_hour;
+
+				
+			// 	$is_time_found = false;
+			// 	foreach ($usage_hours as $hour_range) {
+			// 		$start_time = explode("-", $hour_range)[0];
+			// 		$end_time = explode("-", $hour_range)[1];
+				
+			// 		$start_time_parts = explode(":", $start_time);
+			// 		$end_time_parts = explode(":", $end_time);
+				
+			// 		$start_time_seconds = ($start_time_parts[0] * 3600) + ($start_time_parts[1] * 60);
+			// 		$end_time_seconds = ($end_time_parts[0] * 3600) + ($end_time_parts[1] * 60);
+				
+			// 		$time_parts = explode(":", $time);
+			// 		$time_seconds = ($time_parts[0] * 3600) + ($time_parts[1] * 60) + $time_parts[2];
+				
+			// 		if ($time_seconds >= $start_time_seconds && $time_seconds <= $end_time_seconds) {
+			// 			$is_time_found = true;
+			// 			// echo "The time $time is within the range " . $hour_range . ".\n";
+			// 			break;
+			// 		}
+			// 	}
+				
+			// 	if (!$is_time_found) {
+			// 		// Y Variable
+			// 		$y++;
+			// 		// echo "The time $time is not within any of the ranges in the \$usage_hours array.\n";
+			// 	}
+			// 	$compareBusLines = $data->bus_line;
+			// 	if($bus_lines == $compareBusLines) {
+			// 		// echo "The Bus lines is same! \n";
+			// 	} else {
+			// 		// Z Variable
+			// 		// echo "The Bus lines not contains! \n";
+			// 		$z++;
+			// 	}
+			// 	}
+			// }
+
+			dd($x,$y,$z);
+			// dd($output);
+
 
 			return redirect()->back()->with(['success' => 'Upload file pdf datas !']);
 		}
@@ -153,7 +337,7 @@ class SupplierController extends Controller {
 
 	public function exportSuppliersAll() {
 		$suppliers = Supplier::all();
-		$pdf = PDF::loadView('suppliers.SuppliersAllPDF', compact('suppliers'));
+		$pdf = PDF::loadView('suppliers.AnalyticsAllPDF', compact('suppliers'));
 		return $pdf->download('suppliers.pdf');
 	}
 
