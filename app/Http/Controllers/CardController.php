@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Card;
+use App\Customer;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -23,9 +24,13 @@ class CardController extends Controller
         $category = Category::orderBy('name','ASC')
             ->get()
             ->pluck('name','id');
+        
+        $customer = Customer::orderBy('name','ASC')
+            ->get()
+            ->pluck('name','id');
 
         $cards = Card::all();
-        return view('cards.index', compact('category'));
+        return view('cards.index', compact(['category','customer']));
     }
 
     /**
@@ -65,6 +70,7 @@ class CardController extends Controller
             'usage_hours' => $usage_hours,
             'bus_lines' => $input['bus_lines'],
             'category_id' => $input['category_id'],
+            'customer_id' => $input['customer_id'],
         ];
 
         // $input['image'] = null;
@@ -190,6 +196,9 @@ class CardController extends Controller
         return Datatables::of($card)
             ->addColumn('category_name', function ($card){
                 return $card->category->name;
+            })
+            ->addColumn('customer_name', function ($card){
+                return $card->customer->name;
             })
             ->addColumn('show_photo', function($card){
                 if ($card->image == NULL){

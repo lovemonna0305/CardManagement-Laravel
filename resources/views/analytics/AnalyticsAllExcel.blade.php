@@ -43,18 +43,20 @@
     <thead>
     <tr>
         <td>ID</td>
-        <td>Name</td>
-        <td>Address</td>
-        <td>Email</td>
+        <td>Number</td>
+        <td>Non Working Days</td>
+        <td>Non Working Hours</td>
+        <td>Non Bus Lines</td>
     </tr>
     </thead>
-    @foreach($Analytics as $s)
+    @foreach($datas as $data)
         <tbody>
         <tr>
-            <td>{{ $s->id }}</td>
-            <td>{{ $s->name }}</td>
-            <td>{{ $s->alamat }}</td>
-            <td>{{ $s->email }}</td>
+            <td>{{ $data->id }}</td>
+            <td>{{ $data->number }}</td>
+            <td>{{ $data->non_working_days }}</td>
+            <td>{{ $data->non_working_hours }}</td>
+            <td>{{ $data->non_bus_lines }}</td>
         </tr>
         </tbody>
     @endforeach

@@ -59,6 +59,11 @@
                             {!! Form::select('category_id', $category, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Category --', 'id' => 'category_id', 'required']) !!}
                             <span class="help-block with-errors"></span>
                         </div>
+                        <div class="form-group">
+                            <label >Customer</label>
+                            {!! Form::select('customer_id', $customer, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Customer --', 'id' => 'customer_id', 'required']) !!}
+                            <span class="help-block with-errors"></span>
+                        </div>
 
                     </div>
                     <!-- /.box-body -->

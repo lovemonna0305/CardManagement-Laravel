@@ -14,7 +14,7 @@
         </div>
 
         <div class="box-header">
-            <a onclick="addForm()" class="btn btn-success" ><i class="fa fa-plus"></i> Add Analytics</a>
+            <!-- <a onclick="addForm()" class="btn btn-success" ><i class="fa fa-plus"></i> Add Analytics</a> -->
             <a href="{{ route('exportPDF.AnalyticsAll') }}" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
             <a href="{{ route('exportExcel.AnalyticsAll') }}" class="btn btn-primary"><i class="fa fa-file-excel-o"></i> Export Excel</a>
         </div>

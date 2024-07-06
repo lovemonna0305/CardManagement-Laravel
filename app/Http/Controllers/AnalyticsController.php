@@ -148,18 +148,19 @@ class AnalyticsController extends Controller {
 
 			$currentDateTime = date('Y-m-d-H-i-s');
 			// Generate the file name
-			$fileName = 'card_' . $currentDateTime;
+			$fileName = 'card_' . $currentDateTime.'.'.$request->file->getClientOriginalExtension();
 
-			$file_url = '/upload/pdfs/'.str_slug($fileName, '-').'.'.$request->file->getClientOriginalExtension();
+			
+			$file_url = './upload/pdfs/'.$fileName;
             $request->file->move(public_path('/upload/pdfs/'), $file_url);
 
+			$command = "python ".public_path('upload/pdfs/scrappingData.py')." ".$file_url;
 
-			$command = "python ".public_path('upload/pdfs/scrappingData.py')." 2>&1";
-    		exec($command, $output, $return_var);
-			$resultArray = [];
-			$z = 0;
+			exec($command, $output, $return_var);
 
-			$outputArray = json_decode($output[0]);
+			$validJsonString = str_replace("'", '"', $output[0]);
+			$outputArray = json_decode($validJsonString);
+
 			$real_hours = array(
 				"1" => "09:00-10:00",
 				"2" => "10:00-11:00",
@@ -350,7 +351,18 @@ class AnalyticsController extends Controller {
 
 	public function exportAnalyticsAll() {
 		$analytics = Analytics::all();
-		$pdf = PDF::loadView('analytics.analyticsAllPDF', compact('analytics'));
+		$datas = [];
+		foreach($analytics as $analytic) {
+			$datas[] = (object) [
+				'id'=> $analytic->id,
+				'number' => Card::find($analytic->card_id)->number,
+				'non_working_days' => $analytic->non_working_days,
+				'non_working_hours' => $analytic->non_working_hours,
+				'non_bus_lines' => $analytic->non_bus_lines,
+				'file_url' => $analytic->file_url,
+			];
+		}
+		$pdf = PDF::loadView('analytics.analyticsAllPDF', compact('datas'));
 		return $pdf->download('analytics.pdf');
 	}
 

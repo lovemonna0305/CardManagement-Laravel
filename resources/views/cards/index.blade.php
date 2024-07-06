@@ -23,6 +23,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Category</th>
+                    <th>Customer</th>
                     <th>Number</th>
                     <th>Working Days</th>
                     <th>Bus Lines</th>
@@ -92,6 +93,7 @@
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'category_name', name: 'category_name'},
+                {data: 'customer_name', name: 'customer_name'},
                 {data: 'number', name: 'number'},
                 {data: 'working_days', name: 'working_days'},
                 {data: 'bus_lines', name: 'bus_lines'},
