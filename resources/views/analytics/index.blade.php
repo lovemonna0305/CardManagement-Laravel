@@ -116,6 +116,53 @@
                 }
             });
         }
+        
+        function exportPDF(id) {
+            // save_method = 'edit';
+            // $('input[name=_method]').val('PATCH');
+            // $('#modal-form form')[0].reset();
+            // $.ajax({
+            //     url: "{{ url('Analytics') }}" + '/' + id + "/edit",
+            //     type: "GET",
+            //     dataType: "JSON",
+            //     success: function(data) {
+            //         $('#modal-form').modal('show');
+            //         $('.modal-title').text('Edit Analytics');
+
+            //         $('#id').val(data.id);
+            //         $('#name').val(data.name);
+            //         $('#alamat').val(data.alamat);
+            //         $('#email').val(data.email);
+            //         $('#telepon').val(data.telepon);
+            //     },
+            //     error : function() {
+            //         alert("Nothing Data");
+            //     }
+            // });
+        }
+        function exportExcel(id) {
+            save_method = 'edit';
+            $('input[name=_method]').val('PATCH');
+            $('#modal-form form')[0].reset();
+            $.ajax({
+                url: "{{ url('Analytics') }}" + '/' + id + "/edit",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    $('#modal-form').modal('show');
+                    $('.modal-title').text('Edit Analytics');
+
+                    $('#id').val(data.id);
+                    $('#name').val(data.name);
+                    $('#alamat').val(data.alamat);
+                    $('#email').val(data.email);
+                    $('#telepon').val(data.telepon);
+                },
+                error : function() {
+                    alert("Nothing Data");
+                }
+            });
+        }
 
         function deleteData(id){
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
