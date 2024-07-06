@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ExportSuppliers;
-use App\Imports\SuppliersImport;
+use App\Exports\ExportAnalytics;
+use App\Imports\AnalyticsImport;
 use App\User;
 use Excel;
 use Illuminate\Http\Request;
@@ -42,14 +42,14 @@ class UserController extends Controller {
 	public function store(Request $request) {
 		$this->validate($request, [
 			'name' => 'required',
-			'email' => 'required|unique:suppliers',
+			'email' => 'required|unique:Analytics',
 		]);
 
 		User::create($request->all());
 
 		return response()->json([
 			'success' => true,
-			'message' => 'Suppliers Created',
+			'message' => 'Analytics Created',
 		]);
 
 	}
@@ -85,7 +85,7 @@ class UserController extends Controller {
 	public function update(Request $request, $id) {
 		$this->validate($request, [
 			'name' => 'required|string|min:2',
-			'email' => 'required|string|email|max:255|unique:suppliers',
+			'email' => 'required|string|email|max:255|unique:Analytics',
 		]);
 
 		$users = User::findOrFail($id);
@@ -133,20 +133,20 @@ class UserController extends Controller {
 		if ($request->hasFile('file')) {
 			//UPLOAD FILE
 			$file = $request->file('file'); //GET FILE
-			Excel::import(new SuppliersImport, $file); //IMPORT FILE
-			return redirect()->back()->with(['success' => 'Upload file data suppliers !']);
+			Excel::import(new AnalyticsImport, $file); //IMPORT FILE
+			return redirect()->back()->with(['success' => 'Upload file data Analytics !']);
 		}
 
 		return redirect()->back()->with(['error' => 'Please choose file before!']);
 	}
 
-	public function exportSuppliersAll() {
-		$suppliers = Supplier::all();
-		$pdf = PDF::loadView('suppliers.SuppliersAllPDF', compact('suppliers'));
-		return $pdf->download('suppliers.pdf');
+	public function exportAnalyticsAll() {
+		$Analytics = Analytics::all();
+		$pdf = PDF::loadView('Analytics.AnalyticsAllPDF', compact('Analytics'));
+		return $pdf->download('Analytics.pdf');
 	}
 
 	public function exportExcel() {
-		return (new ExportSuppliers)->download('suppliers.xlsx');
+		return (new ExportAnalytics)->download('Analytics.xlsx');
 	}
 }

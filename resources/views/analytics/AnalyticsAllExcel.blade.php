@@ -48,7 +48,7 @@
         <td>Email</td>
     </tr>
     </thead>
-    @foreach($suppliers as $s)
+    @foreach($Analytics as $s)
         <tbody>
         <tr>
             <td>{{ $s->id }}</td>

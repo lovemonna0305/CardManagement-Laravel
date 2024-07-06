@@ -45,16 +45,16 @@
 
         <tr>
             <td><b>Contact</b></td>
-            <td>: {{ $Product_Masuk->supplier->telepon }}</td>
+            <td>: {{ $Product_Masuk->Analytics->telepon }}</td>
             <td><b>Address</b></td>
-            <td>: {{ $Product_Masuk->supplier->alamat }}</td>
+            <td>: {{ $Product_Masuk->Analytics->alamat }}</td>
         </tr>
 
         <tr>
-            <td><b>Supplier</b></td>
-            <td>: {{ $Product_Masuk->supplier->name }}</td>
+            <td><b>Analytics</b></td>
+            <td>: {{ $Product_Masuk->Analytics->name }}</td>
             <td><b>Email</b></td>
-            <td>: {{ $Product_Masuk->supplier->email }}</td>
+            <td>: {{ $Product_Masuk->Analytics->email }}</td>
         </tr>
 
         <tr>

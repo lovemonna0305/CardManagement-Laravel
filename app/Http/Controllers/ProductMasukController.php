@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Exports\ExportProdukMasuk;
 use App\card;
 use App\Product_Masuk;
-use App\Supplier;
+use App\Analytics;
 use PDF;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -29,12 +29,12 @@ class cardMasukController extends Controller
             ->get()
             ->pluck('name','id');
 
-        $suppliers = Supplier::orderBy('name','ASC')
+        $Analytics = Analytics::orderBy('name','ASC')
             ->get()
             ->pluck('name','id');
 
         $invoice_data = Product_Masuk::all();
-        return view('Product_Masuk.index', compact('cards','suppliers','invoice_data'));
+        return view('Product_Masuk.index', compact('cards','Analytics','invoice_data'));
     }
 
     /**
@@ -57,7 +57,7 @@ class cardMasukController extends Controller
     {
         $this->validate($request, [
             'card_id'     => 'required',
-            'supplier_id'    => 'required',
+            'Analytics_id'    => 'required',
             'qty'            => 'required',
             'tanggal'        => 'required'
         ]);
@@ -109,7 +109,7 @@ class cardMasukController extends Controller
     {
         $this->validate($request, [
             'card_id'     => 'required',
-            'supplier_id'    => 'required',
+            'Analytics_id'    => 'required',
             'qty'            => 'required',
             'tanggal'        => 'required'
         ]);
@@ -152,8 +152,8 @@ class cardMasukController extends Controller
             ->addColumn('cards_name', function ($card){
                 return $card->card->name;
             })
-            ->addColumn('supplier_name', function ($card){
-                return $card->supplier->name;
+            ->addColumn('Analytics_name', function ($card){
+                return $card->Analytics->name;
             })
             ->addColumn('action', function($card){
                 return '<a onclick="editForm('. $card->id .')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
@@ -161,7 +161,7 @@ class cardMasukController extends Controller
 
 
             })
-            ->rawColumns(['cards_name','supplier_name','action'])->make(true);
+            ->rawColumns(['cards_name','Analytics_name','action'])->make(true);
 
     }
 

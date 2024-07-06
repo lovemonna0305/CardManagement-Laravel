@@ -16,13 +16,13 @@ class CreatecardMasukTable extends Migration
         Schema::create('Product_Masuk', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('card_id')->unsigned();
-            $table->integer('supplier_id')->unsigned();
+            $table->integer('Analytics_id')->unsigned();
             $table->integer('qty');
             $table->date('tanggal');
             $table->timestamps();
 
             $table->foreign('card_id')->references('id')->on('cards')->onDelete('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->foreign('Analytics_id')->references('id')->on('Analytics')->onDelete('cascade');
         });
     }
 

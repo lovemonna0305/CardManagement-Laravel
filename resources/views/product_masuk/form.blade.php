@@ -23,8 +23,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label >Supplier</label>
-                            {!! Form::select('supplier_id', $suppliers, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Supplier --', 'id' => 'supplier_id', 'required']) !!}
+                            <label >Analytics</label>
+                            {!! Form::select('Analytics_id', $Analytics, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Analytics --', 'id' => 'Analytics_id', 'required']) !!}
                             <span class="help-block with-errors"></span>
                         </div>
 

@@ -10,13 +10,13 @@
     <div class="box box-success">
 
         <div class="box-header">
-            <h3 class="box-title">List of Suppliers</h3>
+            <h3 class="box-title">List of Analytics</h3>
         </div>
 
         <div class="box-header">
-            <a onclick="addForm()" class="btn btn-success" ><i class="fa fa-plus"></i> Add Suppliers</a>
-            <a href="{{ route('exportPDF.suppliersAll') }}" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
-            <a href="{{ route('exportExcel.suppliersAll') }}" class="btn btn-primary"><i class="fa fa-file-excel-o"></i> Export Excel</a>
+            <a onclick="addForm()" class="btn btn-success" ><i class="fa fa-plus"></i> Add Analytics</a>
+            <a href="{{ route('exportPDF.AnalyticsAll') }}" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
+            <a href="{{ route('exportExcel.AnalyticsAll') }}" class="btn btn-primary"><i class="fa fa-file-excel-o"></i> Export Excel</a>
         </div>
 
 
@@ -26,10 +26,11 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Email</th>
-                    <th>Contact</th>
+                    <th>Number</th>
+                    <th>Non Working Days</th>
+                    <th>Non Working Hours</th>
+                    <th>Now Bus Lines</th>
+                    <th>File</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -39,9 +40,9 @@
         <!-- /.box-body -->
     </div>
 
-    @include('suppliers.form_import')
+    @include('Analytics.form_import')
 
-    @include('suppliers.form')
+    @include('Analytics.form')
 
 @endsection
 
@@ -72,13 +73,14 @@
         var table = $('#sales-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('api.suppliers') }}",
+            ajax: "{{ route('api.Analytics') }}",
             columns: [
                 {data: 'id', name: 'id'},
-                {data: 'name', name: 'name'},
-                {data: 'alamat', name: 'alamat'},
-                {data: 'email', name: 'email'},
-                {data: 'telepon', name: 'telepon'},
+                {data: 'number', name: 'number'},
+                {data: 'non_working_days', name: 'non_working_days'},
+                {data: 'non_working_hours', name: 'non_working_hours'},
+                {data: 'non_bus_lines', name: 'non_bus_lines'},
+                {data: 'file_url', name: 'file_url'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -88,7 +90,7 @@
             $('input[name=_method]').val('POST');
             $('#modal-form').modal('show');
             $('#modal-form form')[0].reset();
-            $('.modal-title').text('Add Suppliers');
+            $('.modal-title').text('Add Analytics');
         }
 
         function editForm(id) {
@@ -96,12 +98,12 @@
             $('input[name=_method]').val('PATCH');
             $('#modal-form form')[0].reset();
             $.ajax({
-                url: "{{ url('suppliers') }}" + '/' + id + "/edit",
+                url: "{{ url('Analytics') }}" + '/' + id + "/edit",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
                     $('#modal-form').modal('show');
-                    $('.modal-title').text('Edit Suppliers');
+                    $('.modal-title').text('Edit Analytics');
 
                     $('#id').val(data.id);
                     $('#name').val(data.name);
@@ -127,7 +129,7 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then(function () {
                 $.ajax({
-                    url : "{{ url('suppliers') }}" + '/' + id,
+                    url : "{{ url('Analytics') }}" + '/' + id,
                     type : "POST",
                     data : {'_method' : 'DELETE', '_token' : csrf_token},
                     success : function(data) {
@@ -155,8 +157,8 @@
             $('#modal-form form').validator().on('submit', function (e) {
                 if (!e.isDefaultPrevented()){
                     var id = $('#id').val();
-                    if (save_method == 'add') url = "{{ url('suppliers') }}";
-                    else url = "{{ url('suppliers') . '/' }}" + id;
+                    if (save_method == 'add') url = "{{ url('Analytics') }}";
+                    else url = "{{ url('Analytics') . '/' }}" + id;
 
                     $.ajax({
                         url : url,

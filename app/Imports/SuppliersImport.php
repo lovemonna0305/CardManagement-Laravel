@@ -2,11 +2,11 @@
 
 namespace App\Imports;
 
-use App\Supplier;
+use App\Analytics;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class SuppliersImport implements ToModel, WithHeadingRow
+class AnalyticsImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -15,7 +15,7 @@ class SuppliersImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Supplier([
+        return new Analytics([
             'name'          => $row['name'],
             'alamat'        => $row['alamat'],
             'email'         => $row['email'],

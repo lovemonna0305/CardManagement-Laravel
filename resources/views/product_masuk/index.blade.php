@@ -36,7 +36,7 @@
                 <tr>
                     <th>ID</th>
                     <th>cards</th>
-                    <th>Supplier</th>
+                    <th>Analytics</th>
                     <th>Qty.</th>
                     <th>In Date</th>
                     <th>Actions</th>
@@ -67,7 +67,7 @@
                 <tr>
                     <th>ID</th>
                     <th>cards</th>
-                    <th>Supplier</th>
+                    <th>Analytics</th>
                     <th>Qty.</th>
                     <th>In Date</th>
                     <th>Action</th>
@@ -78,7 +78,7 @@
                     <tbody>
                     <td>{{ $i->id }}</td>
                     <td>{{ $i->card->name }}</td>
-                    <td>{{ $i->supplier->name }}</td>
+                    <td>{{ $i->Analytics->name }}</td>
                     <td>{{ $i->qty }}</td>
                     <td>{{ $i->tanggal }}</td>
                     <td>
@@ -161,7 +161,7 @@
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'cards_name', name: 'cards_name'},
-                {data: 'supplier_name', name: 'supplier_name'},
+                {data: 'Analytics_name', name: 'Analytics_name'},
                 {data: 'qty', name: 'qty'},
                 {data: 'tanggal', name: 'tanggal'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
@@ -190,7 +190,7 @@
 
                     $('#id').val(data.id);
                     $('#card_id').val(data.card_id);
-                    $('#supplier_id').val(data.supplier_id);
+                    $('#Analytics_id').val(data.Analytics_id);
                     $('#qty').val(data.qty);
                     $('#tanggal').val(data.tanggal);
                 },

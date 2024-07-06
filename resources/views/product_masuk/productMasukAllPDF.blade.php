@@ -44,7 +44,7 @@
         <tr>
             <td>ID</td>
             <td>card</td>
-            <td>Supplier</td>
+            <td>Analytics</td>
             <td>Quantity</td>
             <td>Date</td>
         </tr>
@@ -54,7 +54,7 @@
             <tr>
                 <td>{{ $p->id }}</td>
                 <td>{{ $p->card->name }}</td>
-                <td>{{ $p->supplier->name }}</td>
+                <td>{{ $p->Analytics->name }}</td>
                 <td>{{ $p->qty }}</td>
                 <td>{{ $p->tanggal }}</td>
             </tr>

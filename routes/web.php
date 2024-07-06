@@ -41,11 +41,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/exportSalesAll', 'SaleController@exportSalesAll')->name('exportPDF.salesAll');
 	Route::get('/exportSalesAllExcel', 'SaleController@exportExcel')->name('exportExcel.salesAll');
 
-	Route::resource('suppliers', 'SupplierController');
-	Route::get('/apiSuppliers', 'SupplierController@apiSuppliers')->name('api.suppliers');
-	Route::post('/importSuppliers', 'SupplierController@ImportPDF')->name('import.suppliers');
-	Route::get('/exportSupplierssAll', 'SupplierController@exportSuppliersAll')->name('exportPDF.suppliersAll');
-	Route::get('/exportSuppliersAllExcel', 'SupplierController@exportExcel')->name('exportExcel.suppliersAll');
+	Route::resource('Analytics', 'AnalyticsController');
+	Route::get('/apiAnalytics', 'AnalyticsController@apiAnalytics')->name('api.Analytics');
+	Route::post('/importAnalytics', 'AnalyticsController@ImportPDF')->name('import.Analytics');
+	Route::get('/exportAnalyticssAll', 'AnalyticsController@exportAnalyticsAll')->name('exportPDF.AnalyticsAll');
+	Route::get('/exportAnalyticsAllExcel', 'AnalyticsController@exportExcel')->name('exportExcel.AnalyticsAll');
 
 	Route::resource('cards', 'cardController');
 	Route::get('/apicards', 'cardController@apicards')->name('api.cards');

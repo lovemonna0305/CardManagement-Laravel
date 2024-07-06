@@ -8,7 +8,7 @@ class Product_Masuk extends Model
 {
     protected $table = 'Product_Masuk';
 
-    protected $fillable = ['card_id','supplier_id','qty','tanggal'];
+    protected $fillable = ['card_id','Analytics_id','qty','tanggal'];
 
     protected $hidden = ['created_at','updated_at'];
 
@@ -17,8 +17,8 @@ class Product_Masuk extends Model
         return $this->belongsTo(Card::class);
     }
 
-    public function supplier()
+    public function Analytics()
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Analytics::class);
     }
 }

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ExportSuppliers;
+use App\Exports\ExportAnalytics;
 use App\Card;
-use App\Supplier;
+use App\Analytics;
 use Excel;
 use Illuminate\Http\Request;
 use PDF;
 use Yajra\DataTables\DataTables;
 
-class SupplierController extends Controller {
+class AnalyticsController extends Controller {
 	public function __construct() {
 		$this->middleware('role:admin,staff');
 	}
@@ -20,8 +20,8 @@ class SupplierController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		$suppliers = Supplier::all();
-		return view('suppliers.index');
+		$analytics = Analytics::all();
+		return view('analytics.index');
 	}
 
 	/**
@@ -43,15 +43,15 @@ class SupplierController extends Controller {
 		$this->validate($request, [
 			'name' => 'required',
 			'alamat' => 'required',
-			'email' => 'required|unique:suppliers',
+			'email' => 'required|unique:analytics',
 			'telepon' => 'required',
 		]);
 
-		Supplier::create($request->all());
+		Analytics::create($request->all());
 
 		return response()->json([
 			'success' => true,
-			'message' => 'Suppliers Created',
+			'message' => 'Analytics Created',
 		]);
 
 	}
@@ -73,8 +73,8 @@ class SupplierController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit($id) {
-		$supplier = Supplier::find($id);
-		return $supplier;
+		$analytics = Analytics::find($id);
+		return $analytics;
 	}
 
 	/**
@@ -88,17 +88,17 @@ class SupplierController extends Controller {
 		$this->validate($request, [
 			'name' => 'required|string|min:2',
 			'alamat' => 'required|string|min:2',
-			'email' => 'required|string|email|max:255|unique:suppliers',
+			'email' => 'required|string|email|max:255|unique:Analytics',
 			'telepon' => 'required|string|min:2',
 		]);
 
-		$supplier = Supplier::findOrFail($id);
+		$analytics = Analytics::findOrFail($id);
 
-		$supplier->update($request->all());
+		$analytics->update($request->all());
 
 		return response()->json([
 			'success' => true,
-			'message' => 'Supplier Updated',
+			'message' => 'Analytics Updated',
 		]);
 	}
 
@@ -109,29 +109,31 @@ class SupplierController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy($id) {
-		Supplier::destroy($id);
+		Analytics::destroy($id);
 
 		return response()->json([
 			'success' => true,
-			'message' => 'Supplier Delete',
+			'message' => 'Analytics Delete',
 		]);
 	}
 
-	public function apiSuppliers() {
-		$suppliers = Supplier::all();
-
-		$data = [];
-		foreach($suppliers as $supplier) {
-			$data[]=(
-				'number' => Card::find($supplier->category_id)->first()->,
-				'non_working_days' => Card::find($supplier->category_id),
-			)
+	public function apiAnalytics() {
+		$analytics = Analytics::all();
+		$datas = [];
+		foreach($analytics as $analytic) {
+			$datas[] = (object) [
+				'id'=> $analytic->id,
+				'number' => Card::find($analytic->card_id)->number,
+				'non_working_days' => $analytic->non_working_days,
+				'non_working_hours' => $analytic->non_working_hours,
+				'non_bus_lines' => $analytic->non_bus_lines,
+				'file_url' => $analytic->file_url,
+			];
 		}
-
-		return Datatables::of($suppliers)
-			->addColumn('action', function ($suppliers) {
-				return '<a onclick="editForm(' . $suppliers->id . ')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
-				'<a onclick="deleteData(' . $suppliers->id . ')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+		return Datatables::of($datas)
+			->addColumn('action', function ($datas) {
+				return '<a onclick="editForm(' . $datas->id . ')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
+				'<a onclick="deleteData(' . $datas->id . ')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
 			})
 			->rawColumns(['action'])->make(true);
 	}
@@ -143,24 +145,21 @@ class SupplierController extends Controller {
 		]);
 
 		if ($request->hasFile('file')) {
-			$input['name'] = 'forpdf';
-			$input['image'] = '/upload/pdfs/'.str_slug($input['name'], '-').'.'.$request->file->getClientOriginalExtension();
-            $request->file->move(public_path('/upload/pdfs/'), $input['image']);
+
+			$currentDateTime = date('Y-m-d-H-i-s');
+			// Generate the file name
+			$fileName = 'card_' . $currentDateTime;
+
+			$file_url = '/upload/pdfs/'.str_slug($fileName, '-').'.'.$request->file->getClientOriginalExtension();
+            $request->file->move(public_path('/upload/pdfs/'), $file_url);
 
 
 			$command = "python ".public_path('upload/pdfs/scrappingData.py')." 2>&1";
     		exec($command, $output, $return_var);
 			$resultArray = [];
 			$z = 0;
-			// foreach(json_decode($output[0]) as $data) {
-			// 	if($data->Linha != "S56"){
-			// 		$z++;
-			// 		$resultArray []= $data;
-			// 	}
-			// }
 
 			$outputArray = json_decode($output[0]);
-			// dd($outputArray->datas);
 			$real_hours = array(
 				"1" => "09:00-10:00",
 				"2" => "10:00-11:00",
@@ -177,76 +176,74 @@ class SupplierController extends Controller {
 				"13" => "21:00-22:00",
 			);
 
-			// $card = Card::where('number',$outputArray->number)->first();
+			$card = Card::where('number',$outputArray->number)->first();
 
-			// $x=0; 
-			// $y=0; 
-			// $z=0; 
+			$x=0; 
+			$y=0; 
+			$z=0; 
 			
-			// 	$working_days =  explode(",", $card->working_days);
-			// 	$hours = explode(",", $card->usage_hours);
-			// 	$bus_lines = $card->bus_lines;
+			$working_days =  explode(",", $card->working_days);
+			$hours = explode(",", $card->usage_hours);
+			$bus_lines = $card->bus_lines;
 
-			// 	$usage_hours = [];
+			$usage_hours = [];
 
-			// 	foreach ($outputArray->datas as $data){
-	
-			// 		if (in_array($data->working_day, $working_days)) {
-			// 			// echo "The date " . $data->working_day . " is present in the array.\n". PHP_EOL;
-			// 		} else {
-			// 			$x++;
-	
-			// 			// X Variable
-			// 			// echo "The date " . $data->working_day . " is not present in the array.\n". PHP_EOL;      
-			// 		}
+			foreach ($outputArray->datas as $data){
+
+				if (in_array($data->working_day, $working_days)) {
+					// echo "The date " . $data->working_day . " is present in the array.\n". PHP_EOL;
+				} else {
+					$x++;
+
+					// X Variable
+					// echo "The date " . $data->working_day . " is not present in the array.\n". PHP_EOL;      
+				}
+			
+			
+				foreach ($hours as $key => $value) {
+					if (array_key_exists($value, $real_hours)) {
+						$usage_hours [] = $real_hours[$value];
+					}
+				}
 				
+				// $time = "10:54:31";
+				$time = $data->working_hour;
 				
-			// 		foreach ($hours as $key => $value) {
-			// 			if (array_key_exists($value, $real_hours)) {
-			// 				$usage_hours [] = $real_hours[$value];
-			// 			}
-			// 		}
-					
-			// 		// $time = "10:54:31";
-			// 		$time = $data->working_hour;
-			// 		var_dump($time);
-
-					
-			// 		$is_time_found = false;
-			// 		foreach ($usage_hours as $hour_range) {
-			// 			$start_time = explode("-", $hour_range)[0];
-			// 			$end_time = explode("-", $hour_range)[1];
-					
-			// 			$start_time_parts = explode(":", $start_time);
-			// 			$end_time_parts = explode(":", $end_time);
-					
-			// 			$start_time_seconds = ($start_time_parts[0] * 3600) + ($start_time_parts[1] * 60);
-			// 			$end_time_seconds = ($end_time_parts[0] * 3600) + ($end_time_parts[1] * 60);
-					
-			// 			$time_parts = explode(":", $time);
-			// 			$time_seconds = ($time_parts[0] * 3600) + ($time_parts[1] * 60) + $time_parts[2];
-					
-			// 			if ($time_seconds >= $start_time_seconds && $time_seconds <= $end_time_seconds) {
-			// 				$is_time_found = true;
-			// 				// echo "The time $time is within the range " . $hour_range . ".\n";
-			// 				break;
-			// 			}
-			// 		}
-					
-			// 		if (!$is_time_found) {
-			// 			// Y Variable
-			// 			$y++;
-			// 			// echo "The time $time is not within any of the ranges in the \$usage_hours array.\n";
-			// 		}
-			// 		$compareBusLines = $data->bus_line;
-			// 		if($bus_lines == $compareBusLines) {
-			// 			// echo "The Bus lines is same! \n";
-			// 		} else {
-			// 			// Z Variable
-			// 			// echo "The Bus lines not contains! \n";
-			// 			$z++;
-			// 		}
-			// 	}
+				$is_time_found = false;
+				foreach ($usage_hours as $hour_range) {
+					$start_time = explode("-", $hour_range)[0];
+					$end_time = explode("-", $hour_range)[1];
+				
+					$start_time_parts = explode(":", $start_time);
+					$end_time_parts = explode(":", $end_time);
+				
+					$start_time_seconds = ($start_time_parts[0] * 3600) + ($start_time_parts[1] * 60);
+					$end_time_seconds = ($end_time_parts[0] * 3600) + ($end_time_parts[1] * 60);
+				
+					$time_parts = explode(":", $time);
+					$time_seconds = ($time_parts[0] * 3600) + ($time_parts[1] * 60) + $time_parts[2];
+				
+					if ($time_seconds >= $start_time_seconds && $time_seconds <= $end_time_seconds) {
+						$is_time_found = true;
+						// echo "The time $time is within the range " . $hour_range . ".\n";
+						break;
+					}
+				}
+				
+				if (!$is_time_found) {
+					// Y Variable
+					$y++;
+					// echo "The time $time is not within any of the ranges in the \$usage_hours array.\n";
+				}
+				$compareBusLines = $data->bus_line;
+				if($bus_lines == $compareBusLines) {
+					// echo "The Bus lines is same! \n";
+				} else {
+					// Z Variable
+					// echo "The Bus lines not contains! \n";
+					$z++;
+				}
+			}
 
 
 
@@ -325,8 +322,24 @@ class SupplierController extends Controller {
 			// 	}
 			// }
 
-			dd($x,$y,$z);
+			// dd($x,$y,$z);
 			// dd($output);
+
+			$data = [
+				'card_id' => $card->id,
+				'non_working_days' => $x,
+				'non_working_hours' => $y,
+				'non_bus_lines' => $z,
+				'file_url' => $file_url,
+			];
+			// dd($data);
+
+			Analytics::create($data);
+
+			// return response()->json([
+			// 	'success' => true,
+			// 	'message' => 'Analytics Created',
+			// ]);
 
 
 			return redirect()->back()->with(['success' => 'Upload file pdf datas !']);
@@ -335,13 +348,13 @@ class SupplierController extends Controller {
 		return redirect()->back()->with(['error' => 'Please choose file before!']);
 	}
 
-	public function exportSuppliersAll() {
-		$suppliers = Supplier::all();
-		$pdf = PDF::loadView('suppliers.AnalyticsAllPDF', compact('suppliers'));
-		return $pdf->download('suppliers.pdf');
+	public function exportAnalyticsAll() {
+		$analytics = Analytics::all();
+		$pdf = PDF::loadView('analytics.analyticsAllPDF', compact('analytics'));
+		return $pdf->download('analytics.pdf');
 	}
 
 	public function exportExcel() {
-		return (new ExportSuppliers)->download('suppliers.xlsx');
+		return (new ExportAnalytics)->download('analytics.xlsx');
 	}
 }

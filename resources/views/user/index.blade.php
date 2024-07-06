@@ -36,7 +36,7 @@
         <!-- /.box-body -->
     </div>
 
-    @include('suppliers.form')
+    @include('Analytics.form')
 @endsection
 
 @section('bot')
@@ -85,7 +85,7 @@
                 dataType: "JSON",
                 success: function(data) {
                     $('#modal-form').modal('show');
-                    $('.modal-title').text('Edit Suppliers');
+                    $('.modal-title').text('Edit Analytics');
 
                     $('#id').val(data.id);
                     $('#name').val(data.name);
@@ -137,8 +137,8 @@
             $('#modal-form form').validator().on('submit', function (e) {
                 if (!e.isDefaultPrevented()){
                     var id = $('#id').val();
-                    if (save_method == 'add') url = "{{ url('suppliers') }}";
-                    else url = "{{ url('suppliers') . '/' }}" + id;
+                    if (save_method == 'add') url = "{{ url('Analytics') }}";
+                    else url = "{{ url('Analytics') . '/' }}" + id;
 
                     $.ajax({
                         url : url,
