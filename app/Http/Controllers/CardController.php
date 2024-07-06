@@ -131,7 +131,7 @@ class CardController extends Controller
         ]);
 
         $input = $request->all();
-        $usage_hours = implode(", ", $input['usage_hours']);
+        $usage_hours = implode(",", $input['usage_hours']);
 
         $produk = Card::findOrFail($id);
 

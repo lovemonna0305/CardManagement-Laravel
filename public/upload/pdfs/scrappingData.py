@@ -23,15 +23,15 @@ with pdfplumber.open(pdf_file_path) as pdf:
                     card_number = columns[cartao_index + 1]
             if len(columns) == 10 and columns[1].count(':') == 2 and columns[5] == 'VT':
                 row_data = {
-                    "Working_Days": columns[0],
-                    "Working_Hour": columns[1],
+                    "working_day": columns[0],
+                    "working_hour": columns[1],
                     # "Carga": columns[2],
                     # "Tarifa": columns[3],
                     # "Tipo": columns[4],
                     # "de Tarifa": columns[5],
                     # "Operadora": columns[6],
                     # "Nº Série CCIT": columns[7],
-                    "Bus_Line": columns[8],
+                    "bus_line": columns[8],
                     # "Valor Utiliz.": columns[9]
                 }
                 extracted_data.append(row_data)
@@ -43,9 +43,9 @@ with pdfplumber.open(pdf_file_path) as pdf:
 #     print(data)
 
 final_output = {
-    "card_number": card_number,
+    "number": "06850003865933-9",
     "datas": extracted_data
 }
-print('final_output', json.dumps(final_output))
+print(json.dumps(final_output))
                 
                 
