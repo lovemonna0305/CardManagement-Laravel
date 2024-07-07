@@ -29,14 +29,14 @@ with pdfplumber.open(pdf_file_path) as pdf:
                 row_data = {
                     "working_day": columns[0],
                     "working_hour": columns[1],
-                    # "Carga": columns[2],
-                    # "Tarifa": columns[3],
-                    # "Tipo": columns[4],
-                    # "de Tarifa": columns[5],
-                    # "Operadora": columns[6],
-                    # "Nº Série CCIT": columns[7],
+                    "load": columns[2],
+                    "rate": columns[3],
+                    "type": columns[4],
+                    "of_rate": columns[5],
+                    "operator": columns[6],
+                    "CCIT": columns[7],
                     "bus_line": columns[8],
-                    # "Valor Utiliz.": columns[9]
+                    "used_value": columns[9]
                 }
                 extracted_data.append(row_data)
 

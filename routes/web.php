@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('Analytics', 'AnalyticsController');
 	Route::get('/apiAnalytics', 'AnalyticsController@apiAnalytics')->name('api.Analytics');
 	Route::post('/importAnalytics', 'AnalyticsController@ImportPDF')->name('import.Analytics');
-	Route::get('/exportAnalyticssAll', 'AnalyticsController@exportAnalyticsAll')->name('exportPDF.AnalyticsAll');
+	Route::get('/exportAnalyticsPDF/{id}', 'AnalyticsController@exportAnalyticsAll')->name('exportPDF.AnalyticsAll');
 	Route::get('/exportAnalyticsAllExcel', 'AnalyticsController@exportExcel')->name('exportExcel.AnalyticsAll');
 
 	Route::resource('cards', 'cardController');

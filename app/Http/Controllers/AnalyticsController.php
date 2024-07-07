@@ -21,7 +21,19 @@ class AnalyticsController extends Controller {
 	 */
 	public function index() {
 		$analytics = Analytics::all();
-		return view('analytics.index');
+		$datas = [];
+		foreach($analytics as $analytic) {
+			$datas[] = (object) [
+				'id'=> $analytic->id,
+				'number' => Card::find($analytic->card_id)->number,
+				'non_working_days' => $analytic->non_working_days,
+				'non_working_hours' => $analytic->non_working_hours,
+				'non_bus_lines' => $analytic->non_bus_lines,
+				'file_url' => $analytic->file_url,
+			];
+		}
+
+		return view('analytics.index',compact('datas'));
 	}
 
 	/**
@@ -148,7 +160,7 @@ class AnalyticsController extends Controller {
 		}
 		return Datatables::of($datas)
 			->addColumn('action', function ($datas) {
-				return '<a onclick="exportPDF(' . $datas->id . ')" class="btn btn-success btn-xs"><i class="fa fa-file-pdf-o"></i> Export PDF</a> ' .
+				return '<a href="exportAnalyticsPDF/' . $datas->id . ')" class="btn btn-success btn-xs"><i class="fa fa-file-pdf-o"></i> Export PDF</a> ' .
 				'<a onclick="exportExcel(' . $datas->id . ')" class="btn btn-success btn-xs"><i class="fa fa-file-excel-o"></i> Export Excel</a> ' .
 				'<a onclick="editForm(' . $datas->id . ')" class="btn btn-success btn-xs"><i class="fa fa-file-excel-o"></i> Edit</a> ' .
 				'<a onclick="deleteData(' . $datas->id . ')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
@@ -367,21 +379,8 @@ class AnalyticsController extends Controller {
 		return redirect()->back()->with(['error' => 'Please choose file before!']);
 	}
 
-	public function exportAnalyticsAll($id = 16) {
+	public function exportAnalyticsAll($id) {
 		$analytics = Analytics::find($id);
-		// $datas = [];
-		// foreach($analytics as $analytic) {
-		// 	$datas[] = (object) [
-		// 		'id'=> $analytic->id,
-		// 		'number' => Card::find($analytic->card_id)->number,
-		// 		'non_working_days' => $analytic->non_working_days,
-		// 		'non_working_hours' => $analytic->non_working_hours,
-		// 		'non_bus_lines' => $analytic->non_bus_lines,
-		// 		'file_url' => $analytic->file_url,
-		// 	];
-		// }
-
-
 
 		$file_url = $analytics->file_url;
 
@@ -413,6 +412,10 @@ class AnalyticsController extends Controller {
 		$x=0; 
 		$y=0; 
 		$z=0; 
+
+		$non_working_days = [];
+		$non_working_hours = [];
+		$non_bus_lines = [];
 		
 		$working_days =  explode(",", $card->working_days);
 		$hours = explode(",", $card->usage_hours);
@@ -426,6 +429,7 @@ class AnalyticsController extends Controller {
 				// echo "The date " . $data->working_day . " is present in the array.\n". PHP_EOL;
 			} else {
 				$x++;
+				$non_working_days [] = $data;
 
 				// X Variable
 				// echo "The date " . $data->working_day . " is not present in the array.\n". PHP_EOL;      
@@ -465,6 +469,7 @@ class AnalyticsController extends Controller {
 			if (!$is_time_found) {
 				// Y Variable
 				$y++;
+				$non_working_hours [] = $data;
 				// echo "The time $time is not within any of the ranges in the \$usage_hours array.\n";
 			}
 			$compareBusLines = $data->bus_line;
@@ -474,32 +479,28 @@ class AnalyticsController extends Controller {
 				// Z Variable
 				// echo "The Bus lines not contains! \n";
 				$z++;
+				$non_bus_lines [] = $data;
 			}
 		}
 
+		$card_number = $analytics->card->number;
+
+		$non_working_day_sum = 0;
+		foreach($non_working_days as $non_working_day) {
+			$non_working_day_sum += (float) str_replace(",", ".", $non_working_day->used_value);
+		}
 		
+		$non_working_hour_sum = 0;
+		foreach($non_working_hours as $non_working_hour) {
+			$non_working_hour_sum += (float) str_replace(",", ".", $non_working_hour->used_value);
+		}
+		
+		$non_bus_line_sum = 0;
+		foreach($non_bus_lines as $non_bus_line) {
+			$non_bus_line_sum += (float) str_replace(",", ".", $non_bus_line->used_value);
+		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		$pdf = PDF::loadView('analytics.analyticsAllPDF', compact('x'));
+		$pdf = PDF::loadView('analytics.analyticsAllPDF', compact(['card_number','non_working_day_sum','non_working_hour_sum','non_bus_line_sum','non_working_days','non_working_hours','non_bus_lines']));
 		return $pdf->download('analytics.pdf');
 	}
 
