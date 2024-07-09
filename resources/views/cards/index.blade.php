@@ -18,7 +18,7 @@
 
         <!-- /.box-header -->
         <div class="box-body">
-            <table id="cards-table" class="table table-bordered table-hover table-striped">
+            <table id="cards-table" class="table table-bordered table-hover table-striped" style="table-layout: fixed;overflow-wrap: break-word;">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -127,13 +127,9 @@
                     $('#working_days').val(data.working_days);
                     $('#bus_lines').val(data.bus_lines);
                     var selectedOptions = data.usage_hours.split(',');
-                    for (var i = 0; i < selectedOptions.length; i++) {
-                        var optionVal = selectedOptions[i];
-                        $("#multiselect").find("option[value="+optionVal+"]").prop("selected", true);
-                    }
-
-                    
-                    $('#category_id').val(data.category_id);
+                    $('#multiselect').val(selectedOptions).trigger('change');
+                    $('#category_id').val(data.category_id).trigger('change');
+                    $('#customer_id').val(data.customer_id).trigger('change');
                 },
                 error : function() {
                     alert("Nothing Data");

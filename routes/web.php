@@ -12,6 +12,13 @@
  */
 
 Route::get('/', function () {
+	// return view('auth.login');
+	if (Auth::check()) {
+		// If the user is authenticated, redirect to the dashboard
+		return redirect('/home');
+	}
+
+	// If the user is not authenticated, show the login page
 	return view('auth.login');
 });
 
