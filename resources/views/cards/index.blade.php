@@ -125,6 +125,15 @@
                     $('#id').val(data.id);
                     $('#number').val(data.number);
                     $('#working_days').val(data.working_days);
+
+
+                    let dateArray = data.working_days.split(',').map(function(dateStr) {
+                        let parts = dateStr.split('/');
+                        let result = new Date(parts[2], parts[1] - 1, parts[0]); 
+                        // console.log('result', result)
+                        return result;
+                    });
+                    $('#working_days').datepicker('setDates', dateArray);
                     $('#bus_lines').val(data.bus_lines);
                     var selectedOptions = data.usage_hours.split(',');
                     $('#multiselect').val(selectedOptions).trigger('change');
