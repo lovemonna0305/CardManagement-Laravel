@@ -75,6 +75,20 @@
     <div>
         <table id="categories">
             <thead>
+                <tr>
+                    <td>Data</td>
+                    <td>Hora</td>
+                    <td>Carga</td>
+                    <td>Tarifa</td>
+                    <td>Tipo</td>
+                    <td>de Tarifa</td>
+                    <td>Operadora</td>
+                    <td>CCIT</td>
+                    <td>Linha</td>
+                    <td>Valor Utiliz</td>
+                </tr>
+                </thead>
+                <tbody>
                 @foreach($non_working_days as $non_working_day)
                 <tr>
                     <td>{{$non_working_day->working_day}}</td>
@@ -89,7 +103,7 @@
                     <td>{{$non_working_day->used_value}}</td>
                 </tr>
                 @endforeach
-            </thead>
+            </tbody>
         </table>
     </div>
     <p>Total Spent: <span >{{$non_working_day_sum}}</span> (sum of them)</p>
@@ -99,9 +113,23 @@
     <div>
         <table id="categories">
             <thead>
-                @foreach($non_working_hours as $non_working_hour)
                 <tr>
-                    <td>{{$non_working_hour->working_hour}}</td>
+                    <td>Data</td>
+                    <td>Hora</td>
+                    <td>Carga</td>
+                    <td>Tarifa</td>
+                    <td>Tipo</td>
+                    <td>de Tarifa</td>
+                    <td>Operadora</td>
+                    <td>CCIT</td>
+                    <td>Linha</td>
+                    <td>Valor Utiliz</td>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach($non_working_hours as $non_working_hour)
+                <tr>
+                    <td>{{$non_working_hour->working_day}}</td>
                     <td>{{$non_working_hour->working_hour}}</td>
                     <td>{{$non_working_hour->load}}</td>
                     <td>{{$non_working_hour->rate}}</td>
@@ -113,7 +141,7 @@
                     <td>{{$non_working_hour->used_value}}</td>
                 </tr>
                 @endforeach
-            </thead>
+            </tbody>
         </table>
     </div>
     <p>Total Spent: <span >{{$non_working_hour_sum}}</span> (sum of them)</p>
@@ -123,10 +151,24 @@
     <div>
         <table id="categories">
             <thead>
+                <tr>
+                    <td>Data</td>
+                    <td>Hora</td>
+                    <td>Carga</td>
+                    <td>Tarifa</td>
+                    <td>Tipo</td>
+                    <td>de Tarifa</td>
+                    <td>Operadora</td>
+                    <td>CCIT</td>
+                    <td>Linha</td>
+                    <td>Valor Utiliz</td>
+                    </tr>
+                </thead>
+                <tbody>
                 @foreach($non_bus_lines as $non_bus_line)
                 <tr>
-                    <td>{{$non_bus_line->bus_line}}</td>
-                    <td>{{$non_bus_line->bus_line}}</td>
+                    <td>{{$non_bus_line->working_day}}</td>
+                    <td>{{$non_bus_line->working_hour}}</td>
                     <td>{{$non_bus_line->load}}</td>
                     <td>{{$non_bus_line->rate}}</td>
                     <td>{{$non_bus_line->type}}</td>
@@ -137,10 +179,12 @@
                     <td>{{$non_bus_line->used_value}}</td>
                 </tr>
                 @endforeach
-            </thead>
+            </tbody>
         </table>
     </div>
     <p>Total Spent: <span >{{$non_bus_line_sum}}</span> (sum of them)</p>
+    <!-- <p>Contact Email : lovemonna0305@gmail.com</p> -->
+
 </div>
 
 

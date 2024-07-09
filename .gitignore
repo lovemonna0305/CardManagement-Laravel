@@ -5,7 +5,7 @@
 /node_modules
 /public/public/hot
 /public/public/storage
-/public/public/uploads
+/public/upload
 /storage/*.key
 /storage/debugbar
 /vendor
