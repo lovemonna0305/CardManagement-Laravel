@@ -124,7 +124,7 @@
 
                     $('#id').val(data.id);
                     $('#number').val(data.number);
-                    $('#working_days').val(data.working_days);
+                    // $('#working_days').val(data.working_days);
 
 
                     let dateArray = data.working_days.split(',').map(function(dateStr) {
