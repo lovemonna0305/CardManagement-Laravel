@@ -4,6 +4,13 @@
 @section('top')
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+    <style>
+        table {
+            table-layout: fixed;
+            overflow-wrap: break-word;
+            width: 100% !important
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -18,17 +25,17 @@
 
         <!-- /.box-header -->
         <div class="box-body">
-            <table id="cards-table" class="table table-bordered table-hover table-striped" style="table-layout: fixed;overflow-wrap: break-word;">
+            <table id="cards-table" class="table table-bordered table-hover table-striped">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Category</th>
-                    <th>Customer</th>
-                    <th>Number</th>
-                    <th>Working Days</th>
-                    <th>Bus Lines</th>
-                    <th>Usage Hour</th>
-                    <th>Actions</th>
+                    <th style="width: 3%;">ID</th>
+                    <th style="width: 12%;">Category</th>
+                    <th style="width: 9%;">Customer</th>
+                    <th style="width: 11%;">Number</th>
+                    <th style="width: 32%;">Working Days</th>
+                    <th style="width: 8%;">Bus Lines</th>
+                    <th style="width: 8%;">Usage Hour</th>
+                    <th style="width: 13%;">Actions</th>
                 </tr>
                 </thead>
                 <tbody></tbody>
