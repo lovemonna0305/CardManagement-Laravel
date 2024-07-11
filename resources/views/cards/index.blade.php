@@ -5,7 +5,7 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
     <style>
-        table {
+        .table_style {
             table-layout: fixed;
             overflow-wrap: break-word;
             width: 100% !important
@@ -25,7 +25,7 @@
 
         <!-- /.box-header -->
         <div class="box-body">
-            <table id="cards-table" class="table table-bordered table-hover table-striped">
+            <table id="cards-table" class="table_style table table-bordered table-hover table-striped">
                 <thead>
                 <tr>
                     <th style="width: 3%;">ID</th>
