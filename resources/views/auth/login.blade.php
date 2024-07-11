@@ -2,7 +2,7 @@
 <html lang="en" class="fullscreen-bg">
 
 <head>
-    <title>Login | IMS</title>
+    <title>Login | Card Management System</title>
     <!-- Log on to codeastro.com for more projects! -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
