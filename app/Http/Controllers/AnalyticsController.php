@@ -9,6 +9,7 @@ use Excel;
 use Illuminate\Http\Request;
 use PDF;
 use Yajra\DataTables\DataTables;
+use Smalot\PdfParser\Parser;
 
 class AnalyticsController extends Controller {
 	public function __construct() {
@@ -176,6 +177,56 @@ class AnalyticsController extends Controller {
 
 		if ($request->hasFile('file')) {
 
+			$pdfParser = new Parser();
+			$pdf = $pdfParser->parseFile($request->file->path());
+
+			$content = $pdf->getText();
+
+ 			$lines = explode("\n", $content);
+			$cardNumber = null;
+			if (preg_match('/\d{14}-\d/', $content, $matches)) {
+        $cardNumber = $matches[0];
+			} 
+			$pattern = '/(\d{2}\/\d{2}\/\d{4})\s+(\d{2}:\d{2}:\d{2})(\d{5})\s+(A)\s+(VT)(\d)\s+(\d+)\s+(\d+)\s+(\w+)\s+(\d,\d+)/';
+
+			$extract_datas = [];
+
+			foreach ($lines as $line) {
+				if (preg_match($pattern, $line, $matches)) {
+					$working_day = $matches[1];
+					$working_hour = $matches[2];
+					$load = $matches[3];
+					$rate = $matches[4];
+					$type = $matches[5];
+					$of_rate = $matches[6];
+					$operator = $matches[7];
+					$CCIT = $matches[8];
+					$bus_line = $matches[9];
+					$used_value = $matches[10];
+
+					$extract_data = [
+						'working_day' => $working_day,
+						'working_hour' => $working_hour,
+						'load' => $load,
+						'rate' => $rate,
+						'type' => $type,
+						'of_rate' => $of_rate,
+						'operator' => $operator,
+						'CCIT' => $CCIT,
+						'bus_line' => $bus_line,
+						'used_value' => $used_value,
+				];
+				$extract_datas[] = $extract_data;
+				} else {
+						continue;
+				}
+			}
+			$result = [
+				'card_number' => $cardNumber,
+				'datas' => $extract_datas,
+			];
+			// Join the formatted lines back into a single string
+
 			$currentDateTime = date('Y-m-d-H-i-s');
 			// Generate the file name
 			$fileName = 'card_' . $currentDateTime.'.'.$request->file->getClientOriginalExtension();
@@ -184,12 +235,12 @@ class AnalyticsController extends Controller {
 			$file_url = './upload/pdfs/'.$fileName;
             $request->file->move(public_path('/upload/pdfs/'), $file_url);
 
-			$command = "python ".public_path('upload/pdfs/scrappingData.py')." ".$file_url;
+			// $command = "python ".public_path('upload/pdfs/scrappingData.py')." ".$file_url;
 
-			exec($command, $output, $return_var);
+			// exec($command, $output, $return_var);
 
-			$validJsonString = str_replace("'", '"', $output[0]);
-			$outputArray = json_decode($validJsonString);
+			// $validJsonString = str_replace("'", '"', $output[0]);
+			// $outputArray = json_decode($validJsonString);
 
 			$real_hours = array(
 				"1" => "09:00-10:00",
@@ -207,21 +258,20 @@ class AnalyticsController extends Controller {
 				"13" => "21:00-22:00",
 			);
 
-			$card = Card::where('number',$outputArray->number)->first();
+			$card = Card::where('number',$cardNumber)->first();
 
 			$x=0; 
 			$y=0; 
 			$z=0; 
 			
 			$working_days =  explode(",", $card->working_days);
+			
 			$hours = explode(",", $card->usage_hours);
 			$bus_lines = $card->bus_lines;
 
 			$usage_hours = [];
-
-			foreach ($outputArray->datas as $data){
-
-				if (in_array($data->working_day, $working_days)) {
+			foreach ($extract_datas as $data){
+				if (in_array($data['working_day'], $working_days)) {
 					// echo "The date " . $data->working_day . " is present in the array.\n". PHP_EOL;
 				} else {
 					$x++;
@@ -236,9 +286,8 @@ class AnalyticsController extends Controller {
 						$usage_hours [] = $real_hours[$value];
 					}
 				}
-				
 				// $time = "10:54:31";
-				$time = $data->working_hour;
+				$time = $data['working_hour'];
 				
 				$is_time_found = false;
 				foreach ($usage_hours as $hour_range) {
@@ -266,7 +315,7 @@ class AnalyticsController extends Controller {
 					$y++;
 					// echo "The time $time is not within any of the ranges in the \$usage_hours array.\n";
 				}
-				$compareBusLines = $data->bus_line;
+				$compareBusLines = $data['bus_line'];
 				if($bus_lines == $compareBusLines) {
 					// echo "The Bus lines is same! \n";
 				} else {
