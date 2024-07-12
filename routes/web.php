@@ -56,7 +56,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::resource('cards', 'cardController');
 	Route::get('/apicards', 'cardController@apicards')->name('api.cards');
-	Route::post('/test', 'cardController@test')->name('test');
+	Route::post('/saveworkingdays', 'cardController@saveworkingdays')->name('saveworkingdays');
+	Route::get('/getworkingdays', 'cardController@getworkingdays')->name('getworkingdays');
 
 	Route::resource('cardsOut', 'CardRegisterController');
 	Route::get('/apicardsOut', 'CardRegisterController@apicardsOut')->name('api.cardsOut');

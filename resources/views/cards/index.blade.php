@@ -115,8 +115,30 @@
             $('#modal-form').modal('show');
             $('#modal-form form')[0].reset();
             $('.modal-title').text('Add cards');
-        }
+            var url = "{{ route('getworkingdays') }}";
+            console.log('called')
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function(data) {
+                    if (data.success) {
+                        console.log('Received working days:', data.working_days);
+                        $('#working_days').val(data.working_days);
 
+                        let dateArray = data.working_days.split(',').map(function(dateStr) {
+                            let parts = dateStr.split('/');
+                            return new Date(parts[2], parts[1] - 1, parts[0]); 
+                        });
+                        console.log('dateArray', dateArray);
+                        $('#working_days').datepicker('setDates', dateArray);
+                    }
+                },
+                error: function(data) {
+                }
+            });
+
+        }
+        
         function editForm(id) {
             save_method = 'edit';
             $('input[name=_method]').val('PATCH');
@@ -140,7 +162,7 @@
                         // console.log('result', result)
                         return result;
                     });
-                    $('#working_days').datepicker('setDates', dateArray);
+                    $('#working').datepicker('setDates', dateArray);
                     $('#bus_lines').val(data.bus_lines);
                     var selectedOptions = data.usage_hours.split(',');
                     $('#multiselect').val(selectedOptions).trigger('change');
@@ -189,9 +211,8 @@
             });
         }
         $(function() {
-        $('#defaultdays-form form').validator().on('submit', function(e) {
-            if (!e.isDefaultPrevented()) {
-                var url = "{{ route('test') }}";
+            function fetchWorkingDays() {
+                var url = "{{ route('saveworkingdays') }}";
 
                 $.ajax({
                     url: url,
@@ -201,18 +222,15 @@
                     processData: false,
                     success: function(data) {
                         if (data.success) {
+                            console.log('Received working days:', data.working_days);
+                            $('#working_day').val(data.working_days);
 
-                            console.log('dfd', data.working_days)
-                            // // Display the working days in the input
-                            // $('#working_days').val(data.working_days);
                             let dateArray = data.working_days.split(',').map(function(dateStr) {
                                 let parts = dateStr.split('/');
-                                let result = new Date(parts[2], parts[1] - 1, parts[0]); 
-                                // console.log('result', result)
-                                return result;
+                                return new Date(parts[2], parts[1] - 1, parts[0]); 
                             });
                             console.log('dateArray', dateArray);
-                            $('#working').datepicker('setDates', dateArray);
+                            $('#working_day').datepicker('setDates', dateArray);
                             swal({
                                 title: 'Success!',
                                 text: data.message,
@@ -230,10 +248,39 @@
                         });
                     }
                 });
-                return false;
+            }
+            $('#defaultdays-form form').validator().on('submit', function(e) {
+                if (!e.isDefaultPrevented()) {
+                    fetchWorkingDays();
+                    return false;
                 }
             });
         });
+        
+        function getWorkingDays(){
+            var url = "{{ route('getworkingdays') }}";
+            console.log('called')
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function(data) {
+                    if (data.success) {
+                        console.log('Received working days:', data.working_days);
+                        $('#working_day').val(data.working_days);
+
+                        let dateArray = data.working_days.split(',').map(function(dateStr) {
+                            let parts = dateStr.split('/');
+                            return new Date(parts[2], parts[1] - 1, parts[0]); 
+                        });
+                        console.log('dateArray', dateArray);
+                        $('#working_day').datepicker('setDates', dateArray);
+                    }
+                },
+                error: function(data) {
+                }
+            });
+        }
+        getWorkingDays();
 
         $(function(){
             $('#modal-form form').validator().on('submit', function (e) {

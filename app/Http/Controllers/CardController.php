@@ -50,7 +50,7 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function test(Request $request){
+    public function saveworkingdays(Request $request){
         $workingDays = $request->working_days;
         
         $data = [
@@ -64,14 +64,26 @@ class CardController extends Controller
             
         ];
         Card::create($data);
-        // $card = Card::where('is_default', 1)->first(); // Adjust as needed to get the right card
-        // $workingDaysFromDb = $card ? $card->working_days : null;
-        // dd($workingDays);
         return response()->json([
             'success' => true,
             'message' => 'cards Created',
             'working_days' => $workingDays
         ]);
+    }
+    public function getworkingdays(){
+        $card = Card::where('is_default', 1)->orderBy('created_at', 'desc')->first();
+
+        if ($card) {
+            return response()->json([
+                'success' => true,
+                'working_days' => $card->working_days
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'No working days found'
+            ]);
+        }
     }
 
     public function store(Request $request)
