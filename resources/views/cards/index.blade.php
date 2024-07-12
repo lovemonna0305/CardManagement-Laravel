@@ -43,7 +43,7 @@
         </div>
         <!-- /.box-body -->
     </div>
-
+    @include('cards.form_days')
     @include('cards.form')
 
 @endsection
@@ -188,11 +188,58 @@
                 });
             });
         }
+        $(function() {
+        $('#defaultdays-form form').validator().on('submit', function(e) {
+            if (!e.isDefaultPrevented()) {
+                var url = "{{ route('test') }}";
+
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: new FormData($("#defaultdays-form form")[0]),
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        if (data.success) {
+
+                            console.log('dfd', data.working_days)
+                            // // Display the working days in the input
+                            // $('#working_days').val(data.working_days);
+                            let dateArray = data.working_days.split(',').map(function(dateStr) {
+                                let parts = dateStr.split('/');
+                                let result = new Date(parts[2], parts[1] - 1, parts[0]); 
+                                // console.log('result', result)
+                                return result;
+                            });
+                            console.log('dateArray', dateArray);
+                            $('#working').datepicker('setDates', dateArray);
+                            swal({
+                                title: 'Success!',
+                                text: data.message,
+                                type: 'success',
+                                timer: '1500'
+                            });
+                        }
+                    },
+                    error: function(data) {
+                        swal({
+                            title: 'Oops...',
+                            text: data.message,
+                            type: 'error',
+                            timer: '1500'
+                        });
+                    }
+                });
+                return false;
+                }
+            });
+        });
 
         $(function(){
             $('#modal-form form').validator().on('submit', function (e) {
                 if (!e.isDefaultPrevented()){
                     var id = $('#id').val();
+                    console.log('dfdf')
                     if (save_method == 'add') url = "{{ url('cards') }}";
                     else url = "{{ url('cards') . '/' }}" + id;
 

@@ -8,7 +8,7 @@ class Card extends Model
 {
     protected $table = 'cards';
 
-    protected $fillable = ['category_id','customer_id','number','working_days','bus_lines','usage_hours'];
+    protected $fillable = ['category_id','customer_id','number','working_days','bus_lines','usage_hours', 'is_default'];
 
     protected $hidden = ['created_at','updated_at'];
 

@@ -49,6 +49,31 @@ class CardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function test(Request $request){
+        $workingDays = $request->working_days;
+        
+        $data = [
+            'number' => 1,
+            'working_days' => $workingDays,
+            'usage_hours' => 1,
+            'bus_lines' => 1,
+            'category_id' => 1,
+            'customer_id' => 2,
+            'is_default' => 1,
+            
+        ];
+        Card::create($data);
+        // $card = Card::where('is_default', 1)->first(); // Adjust as needed to get the right card
+        // $workingDaysFromDb = $card ? $card->working_days : null;
+        // dd($workingDays);
+        return response()->json([
+            'success' => true,
+            'message' => 'cards Created',
+            'working_days' => $workingDays
+        ]);
+    }
+
     public function store(Request $request)
     {
         $category = Category::orderBy('name','ASC')
@@ -71,6 +96,7 @@ class CardController extends Controller
             'bus_lines' => $input['bus_lines'],
             'category_id' => $input['category_id'],
             'customer_id' => $input['customer_id'],
+            'is_default' => 0
         ];
 
         // $input['image'] = null;
@@ -191,7 +217,8 @@ class CardController extends Controller
     }
 
     public function apicards(){
-        $card = Card::all();
+        $card = Card::where('is_default',0)->get();
+        
 
         return Datatables::of($card)
             ->addColumn('category_name', function ($card){
