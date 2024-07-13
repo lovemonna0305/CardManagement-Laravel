@@ -211,7 +211,7 @@
             });
         }
         $(function() {
-            function fetchWorkingDays() {
+            function saveWorkingDays() {
                 var url = "{{ route('saveworkingdays') }}";
 
                 $.ajax({
@@ -222,15 +222,7 @@
                     processData: false,
                     success: function(data) {
                         if (data.success) {
-                            console.log('Received working days:', data.working_days);
-                            $('#working_day').val(data.working_days);
-
-                            let dateArray = data.working_days.split(',').map(function(dateStr) {
-                                let parts = dateStr.split('/');
-                                return new Date(parts[2], parts[1] - 1, parts[0]); 
-                            });
-                            console.log('dateArray', dateArray);
-                            $('#working_day').datepicker('setDates', dateArray);
+                            
                             swal({
                                 title: 'Success!',
                                 text: data.message,
@@ -251,7 +243,7 @@
             }
             $('#defaultdays-form form').validator().on('submit', function(e) {
                 if (!e.isDefaultPrevented()) {
-                    fetchWorkingDays();
+                    saveWorkingDays();
                     return false;
                 }
             });
