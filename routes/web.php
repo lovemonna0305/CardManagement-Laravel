@@ -54,10 +54,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/exportAnalyticsPDF/{id}', 'AnalyticsController@exportAnalyticsAll')->name('exportPDF.AnalyticsAll');
 	Route::get('/exportAnalyticsAllExcel', 'AnalyticsController@exportExcel')->name('exportExcel.AnalyticsAll');
 
-	Route::resource('cards', 'cardController');
-	Route::get('/apicards', 'cardController@apicards')->name('api.cards');
-	Route::post('/saveworkingdays', 'cardController@saveworkingdays')->name('saveworkingdays');
-	Route::get('/getworkingdays', 'cardController@getworkingdays')->name('getworkingdays');
+	Route::resource('cards', 'CardController');
+	Route::get('/apicards', 'CardController@apicards')->name('api.cards');
+	Route::post('/saveworkingdays', 'CardController@saveworkingdays')->name('saveworkingdays');
+	Route::get('/getworkingdays', 'CardController@getworkingdays')->name('getworkingdays');
 
 	Route::resource('cardsOut', 'CardRegisterController');
 	Route::get('/apicardsOut', 'CardRegisterController@apicardsOut')->name('api.cardsOut');
