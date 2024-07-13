@@ -148,6 +148,7 @@
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
+                    console.log('data', data)
                     $('#modal-form').modal('show');
                     $('.modal-title').text('Edit cards');
 
@@ -162,7 +163,7 @@
                         // console.log('result', result)
                         return result;
                     });
-                    $('#working').datepicker('setDates', dateArray);
+                    $('#working_days').datepicker('setDates', dateArray);
                     $('#bus_lines').val(data.bus_lines);
                     var selectedOptions = data.usage_hours.split(',');
                     $('#multiselect').val(selectedOptions).trigger('change');
