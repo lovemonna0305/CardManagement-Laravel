@@ -66,7 +66,7 @@ class CardController extends Controller
         Card::create($data);
         return response()->json([
             'success' => true,
-            'message' => 'cards Created',
+            'message' => 'Working Days Created',
             'working_days' => $workingDays
         ]);
     }
@@ -192,9 +192,9 @@ class CardController extends Controller
 
         $data = [
             'number' => $input['number'],
-            'working_days' => $input['working_days'],
-            'usage_hours' => $usage_hours,
-            'bus_lines' => $input['bus_lines'],
+            'working_days' => json_encode($input['working_days']),
+            'usage_hours' => json_encode($usage_hours),
+            'bus_lines' => json_encode($input['bus_lines']),
             'category_id' => $input['category_id'],
         ];
 

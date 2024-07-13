@@ -260,6 +260,10 @@ class AnalyticsController extends Controller {
 
 			$card = Card::where('number',$cardNumber)->first();
 
+			if($card==null) {
+				return redirect()->back()->with(['error' => 'Card Number Not register! Please register Card according to Number']);
+			}
+
 			$x=0; 
 			$y=0; 
 			$z=0; 
