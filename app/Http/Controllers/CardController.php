@@ -52,7 +52,8 @@ class CardController extends Controller
 
     public function saveworkingdays(Request $request){
         $workingDays = $request->working_days;
-        
+        $condition = ['is_default' => 1];
+
         $data = [
             'number' => 1,
             'working_days' => $workingDays,
@@ -63,10 +64,10 @@ class CardController extends Controller
             'is_default' => 1,
             
         ];
-        Card::create($data);
+        $card = Card::updateOrCreate($condition, $data);
         return response()->json([
             'success' => true,
-            'message' => 'Working Days Created',
+            'message' => 'Working Days ' . ($card->wasRecentlyCreated ? 'Created' : 'Updated'),
             'working_days' => $workingDays
         ]);
     }
