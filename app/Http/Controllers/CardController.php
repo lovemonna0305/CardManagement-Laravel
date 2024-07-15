@@ -60,7 +60,7 @@ class CardController extends Controller
             'usage_hours' => 1,
             'bus_lines' => 1,
             'category_id' => 1,
-            'customer_id' => 2,
+            'customer_id' => 1,
             'is_default' => 1,
             
         ];
