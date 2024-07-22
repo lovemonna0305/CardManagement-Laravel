@@ -291,12 +291,22 @@
                         success : function(data) {
                             $('#modal-form').modal('hide');
                             table.ajax.reload();
-                            swal({
-                                title: 'Success!',
-                                text: data.message,
-                                type: 'success',
-                                timer: '1500'
-                            })
+                            console.log("data",data);
+                            if (data.success) {
+                                swal({
+                                    title: 'Success!',
+                                    text: data.message,
+                                    type: 'success',
+                                    timer: '1500'
+                                    });
+                            } else {
+                                swal({
+                                    title: 'Opps!',
+                                    text: data.message,
+                                    type: 'warning',
+                                    timer: '1500'
+                                });
+                            }
                         },
                         error : function(data){
                             swal({

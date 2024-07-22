@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Analytics;
 use App\Category;
 use App\Card;
 use App\Customer;
@@ -101,6 +102,14 @@ class CardController extends Controller
         ]);
         
         $input = $request->all();
+
+        $existCard = Card::where('number',$input['number'])->first();
+        if($existCard) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Card Exist Aready'
+            ]);
+        }
         $usage_hours = implode(",", $input['usage_hours']);
         $data = [
             'number' => $input['number'],
@@ -193,9 +202,9 @@ class CardController extends Controller
 
         $data = [
             'number' => $input['number'],
-            'working_days' => json_encode($input['working_days']),
-            'usage_hours' => json_encode($usage_hours),
-            'bus_lines' => json_encode($input['bus_lines']),
+            'working_days' => $input['working_days'],
+            'usage_hours' => $usage_hours,
+            'bus_lines' => $input['bus_lines'],
             'category_id' => $input['category_id'],
         ];
 
@@ -222,6 +231,7 @@ class CardController extends Controller
         }
 
         Card::destroy($id);
+        Analytics::where('card_id', $id)->delete();
 
         return response()->json([
             'success' => true,
